@@ -8,6 +8,7 @@ import (
 type NodeInput struct {
 	Url        string
 	StatusCode int
+	Origin     string
 }
 
 func init() {
@@ -21,23 +22,26 @@ func AddNode(input *NodeInput) {
 	}
 
 	if _, ok := common.Nodemap[domain]; !ok {
-		common.Nodemap[domain] = common.NewNode(domain)
+		common.Nodemap[domain] = common.NewNode(domain, input.Origin)
 	}
 
 	currentNode := common.Nodemap[domain]
+	currentNode.Origins = append(currentNode.Origins, input.Origin)
 
 	if _, ok := currentNode.Children[subdomain]; !ok {
-		currentNode.Children[subdomain] = common.NewNode(subdomain)
+		currentNode.Children[subdomain] = common.NewNode(subdomain, input.Origin)
 	}
 
 	currentNode = currentNode.Children[subdomain]
+	currentNode.Origins = append(currentNode.Origins, input.Origin)
 
 	for _, path := range paths {
 		if _, ok := currentNode.Children[path]; !ok {
-			currentNode.Children[path] = common.NewNode(path)
+			currentNode.Children[path] = common.NewNode(path, input.Origin)
 		}
 
 		currentNode = currentNode.Children[path]
+		currentNode.Origins = append(currentNode.Origins, input.Origin)
 	}
 
 	for key, values := range queryParams {

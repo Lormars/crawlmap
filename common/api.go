@@ -7,14 +7,16 @@ type Node struct {
 	Children   map[string]*Node
 	Params     QueryParams
 	StatusCode int
+	Origins    []string
 }
 
-func NewNode(name string) *Node {
+func NewNode(name, origin string) *Node {
 	return &Node{
 		Name:       name,
 		Children:   make(map[string]*Node),
 		Params:     make(QueryParams),
 		StatusCode: 0,
+		Origins:    []string{origin},
 	}
 }
 
