@@ -48,6 +48,6 @@ func AddNode(input *NodeInput) {
 
 }
 
-func Save(fileName string) {
-	internal.SaveToFile(fileName)
+func Save(dirName string) {
+	internal.SaveToFile(dirName)
 }
