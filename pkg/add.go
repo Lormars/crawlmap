@@ -14,9 +14,11 @@ type NodeInput struct {
 }
 
 var mu sync.Mutex
+var originMap map[string][]string
 
 func init() {
 	common.Nodemap = make(map[string]*common.Node)
+	originMap = make(map[string][]string)
 }
 
 func AddNode(input *NodeInput) {
@@ -34,6 +36,8 @@ func AddNode(input *NodeInput) {
 		currentNode = common.Nodemap[domain]
 		// currentNode.Origins = append(currentNode.Origins, input.Origin)
 	}
+
+	var sub string
 	for _, subdomain := range subdomains {
 		if _, ok := currentNode.Children[subdomain]; !ok {
 			currentNode.Children[subdomain] = common.NewNode(subdomain)
@@ -42,6 +46,7 @@ func AddNode(input *NodeInput) {
 			currentNode = currentNode.Children[subdomain]
 			// currentNode.Origins = append(currentNode.Origins, input.Origin)
 		}
+		sub = subdomain
 	}
 
 	for _, path := range paths {
@@ -61,6 +66,7 @@ func AddNode(input *NodeInput) {
 
 	currentNode.StatusCode = input.StatusCode
 	currentNode.Origins = append(currentNode.Origins, input.Origin)
+	originMap[sub] = append(originMap[sub], input.Origin)
 
 }
 
@@ -69,4 +75,11 @@ func Save(dirName string) {
 	mu.Lock()
 	defer mu.Unlock()
 	common.Nodemap = make(map[string]*common.Node)
+	originMap = make(map[string][]string)
+}
+
+func ReturnOrigin() map[string][]string {
+	mu.Lock()
+	defer mu.Unlock()
+	return originMap
 }

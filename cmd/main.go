@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/lormars/crawlmap/pkg"
 )
 
@@ -28,6 +30,8 @@ func main() {
 	}
 
 	// Save the nodemap to a file
-	pkg.Save("output")
+	// pkg.Save("output")
+	origin := pkg.ReturnOrigin()
+	fmt.Println(origin)
 
 }
