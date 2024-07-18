@@ -59,4 +59,5 @@ func AddNode(input *NodeInput) {
 
 func Save(dirName string) {
 	internal.SaveToFile(dirName)
+	common.Nodemap = make(map[string]*common.Node)
 }
