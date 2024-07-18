@@ -20,7 +20,7 @@ func init() {
 }
 
 func AddNode(input *NodeInput) {
-	domain, subdomain, paths, queryParams, err := internal.ParseURL(input.Url)
+	domain, subdomains, paths, queryParams, err := internal.ParseURL(input.Url)
 	if err != nil {
 		return
 	}
@@ -34,13 +34,14 @@ func AddNode(input *NodeInput) {
 		currentNode = common.Nodemap[domain]
 		// currentNode.Origins = append(currentNode.Origins, input.Origin)
 	}
-
-	if _, ok := currentNode.Children[subdomain]; !ok {
-		currentNode.Children[subdomain] = common.NewNode(subdomain)
-		currentNode = currentNode.Children[subdomain]
-	} else {
-		currentNode = currentNode.Children[subdomain]
-		// currentNode.Origins = append(currentNode.Origins, input.Origin)
+	for _, subdomain := range subdomains {
+		if _, ok := currentNode.Children[subdomain]; !ok {
+			currentNode.Children[subdomain] = common.NewNode(subdomain)
+			currentNode = currentNode.Children[subdomain]
+		} else {
+			currentNode = currentNode.Children[subdomain]
+			// currentNode.Origins = append(currentNode.Origins, input.Origin)
+		}
 	}
 
 	for _, path := range paths {

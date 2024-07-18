@@ -7,7 +7,7 @@ import (
 	"github.com/lormars/crawlmap/common"
 )
 
-func ParseURL(rawURL string) (domain, subdomain string, paths []string, queryParams common.QueryParams, err error) {
+func ParseURL(rawURL string) (domain string, subdomains, paths []string, queryParams common.QueryParams, err error) {
 	parsedURL, err := url.Parse(rawURL)
 	if err != nil {
 		return
@@ -15,10 +15,12 @@ func ParseURL(rawURL string) (domain, subdomain string, paths []string, queryPar
 	hostParts := strings.Split(parsedURL.Hostname(), ".")
 	if len(hostParts) > 2 {
 		domain = strings.Join(hostParts[len(hostParts)-2:], ".")
-		subdomain = parsedURL.Hostname()
+		for i := len(hostParts) - 2; i >= 0; i-- {
+			subdomains = append(subdomains, strings.Join(hostParts[i:], "."))
+		}
 	} else {
 		domain = parsedURL.Hostname()
-		subdomain = domain
+		subdomains = []string{domain}
 	}
 
 	paths = strings.Split(strings.Trim(parsedURL.Path, "/"), "/")

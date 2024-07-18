@@ -9,8 +9,8 @@ func main() {
 	sampleInputs := []pkg.NodeInput{
 		// URLs for example.com
 		{Url: "https://sub1.example.com/path1?param1=value1", StatusCode: 200, Origin: "script.js"},
-		{Url: "https://sub1.example.com/path2?param2=value2", StatusCode: 404, Origin: "index.html"},
-		{Url: "https://sub2.example.com/path1/path2?param3=value3&param4=value4", StatusCode: 500, Origin: "api.js"},
+		{Url: "https://sub4.sub2.example.com/path2?param2=value2", StatusCode: 404, Origin: "index.html"},
+		{Url: "https://sub3.sub2.example.com/path1/path2?param3=value3&param4=value4", StatusCode: 500, Origin: "api.js"},
 		{Url: "https://example.com/path1/path2/path3?param4=value4", StatusCode: 200, Origin: "homepage.html"},
 
 		// URLs for abc.com
