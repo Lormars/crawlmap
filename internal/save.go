@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"sync"
 
 	"github.com/lormars/crawlmap/common"
 )
@@ -13,7 +14,9 @@ func SaveToFile(dirname string) error {
 	if err != nil {
 		return err
 	}
-
+	var mu sync.Mutex
+	mu.Lock()
+	defer mu.Unlock()
 	for key, node := range common.Nodemap {
 		data, err := json.MarshalIndent(node, "", "  ")
 		if err != nil {

@@ -1,6 +1,8 @@
 package pkg
 
 import (
+	"sync"
+
 	"github.com/lormars/crawlmap/common"
 	"github.com/lormars/crawlmap/internal"
 )
@@ -11,6 +13,8 @@ type NodeInput struct {
 	Origin     string
 }
 
+var mu sync.Mutex
+
 func init() {
 	common.Nodemap = make(map[string]*common.Node)
 }
@@ -20,8 +24,9 @@ func AddNode(input *NodeInput) {
 	if err != nil {
 		return
 	}
-
 	var currentNode *common.Node
+	mu.Lock()
+	defer mu.Unlock()
 	if _, ok := common.Nodemap[domain]; !ok {
 		common.Nodemap[domain] = common.NewNode(domain, input.Origin)
 		currentNode = common.Nodemap[domain]
@@ -59,5 +64,7 @@ func AddNode(input *NodeInput) {
 
 func Save(dirName string) {
 	internal.SaveToFile(dirName)
+	mu.Lock()
+	defer mu.Unlock()
 	common.Nodemap = make(map[string]*common.Node)
 }
