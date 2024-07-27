@@ -31,7 +31,8 @@ func main() {
 
 	// Save the nodemap to a file
 	// pkg.Save("output")
-	origin := pkg.ReturnOrigin()
-	fmt.Println(origin)
+	// origin := pkg.ReturnOrigin()
+	// fmt.Println(origin)
+	fmt.Println(pkg.ReturnSubdomains("abc.com"))
 
 }
